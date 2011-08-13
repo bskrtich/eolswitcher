@@ -1,0 +1,4 @@
+*.rbuisate
+*.obsolete
+Builds*
+*.debug
