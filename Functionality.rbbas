@@ -116,8 +116,8 @@ Protected Module Functionality
 		  // Convert the EOL
 		  Dim theResult As String = ReplaceLineEndings( theContent, EndOfLine.Unix )
 		  
-		  // Go back to the start of the file and overwrite it
-		  theStream.Position = 0
+		  // Reset the destination file and rewrite it
+		  theStream.Length = 0
 		  theStream.Write( theResult )
 		  
 		  // Check for error while writing

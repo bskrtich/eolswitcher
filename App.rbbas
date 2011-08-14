@@ -14,7 +14,5 @@ Inherits Application
 		#Tag Instance, Platform = Mac OS, Language = Default, Definition  = \"Cmd+Q"
 		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"Ctrl+Q"
 	#tag EndConstant
-
-
 End Class
 #tag EndClass
