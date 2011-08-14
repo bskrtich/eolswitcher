@@ -16,6 +16,7 @@ Protected Module FolderItemLib
 		    Return ""
 		    
 		  End If
+		  
 		End Function
 	#tag EndMethod
 

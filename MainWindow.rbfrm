@@ -77,7 +77,7 @@ Begin Window MainWindow
       Scope           =   0
       TabIndex        =   1
       TabPanelIndex   =   0
-      Text            =   ""
+      Text            =   "Click on Choose to select a folder to process"
       TextAlign       =   0
       TextColor       =   &h000000
       TextFont        =   "SmallSystem"
@@ -148,46 +148,14 @@ Begin Window MainWindow
       Visible         =   True
       Width           =   80
    End
-   Begin StaticText LabelInfos
-      AutoDeactivate  =   True
-      Bold            =   False
-      DataField       =   ""
-      DataSource      =   ""
-      Enabled         =   True
-      Height          =   20
-      HelpTag         =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   ""
-      Left            =   20
-      LockBottom      =   ""
-      LockedInPosition=   False
-      LockLeft        =   ""
-      LockRight       =   ""
-      LockTop         =   ""
-      Multiline       =   ""
-      Scope           =   0
-      TabIndex        =   4
-      TabPanelIndex   =   0
-      Text            =   "No folder selected"
-      TextAlign       =   0
-      TextColor       =   &h000000
-      TextFont        =   "SmallSystem"
-      TextSize        =   0
-      TextUnit        =   0
-      Top             =   118
-      Underline       =   ""
-      Visible         =   True
-      Width           =   268
-   End
    Begin Listbox ListFiles
       AutoDeactivate  =   True
       AutoHideScrollbars=   True
       Bold            =   ""
       Border          =   True
-      ColumnCount     =   3
+      ColumnCount     =   2
       ColumnsResizable=   ""
-      ColumnWidths    =   "60,,60"
+      ColumnWidths    =   ,60
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -203,7 +171,7 @@ Begin Window MainWindow
       Hierarchical    =   ""
       Index           =   -2147483648
       InitialParent   =   ""
-      InitialValue    =   "#	Name	Type"
+      InitialValue    =   "Name	Type"
       Italic          =   ""
       Left            =   20
       LockBottom      =   ""
@@ -229,88 +197,75 @@ Begin Window MainWindow
       Width           =   360
       _ScrollWidth    =   -1
    End
+   Begin StaticText LabelInfos
+      AutoDeactivate  =   True
+      Bold            =   False
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   20
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   ""
+      LockRight       =   ""
+      LockTop         =   ""
+      Multiline       =   ""
+      Scope           =   0
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      Text            =   "0 files to process"
+      TextAlign       =   0
+      TextColor       =   &h000000
+      TextFont        =   "SmallSystem"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   118
+      Underline       =   ""
+      Visible         =   True
+      Width           =   268
+   End
 End
 #tag EndWindow
 
 #tag WindowCode
-	#tag Method, Flags = &h0
-		Sub CollectFolderItem(inBaseFolder As FolderItem)
-		  
-		  //-- Collects all source code file that needs to be converted
-		  //   Uses recurdion to collect inside subfolders
-		  
-		  For i As Integer = inBaseFolder.Count DownTo 1
-		    
-		    Dim theItem As FolderItem = inBaseFolder.Item( i )
-		    
-		    
-		    If theItem.Directory Then
-		      
-		      // Here is the recursive call
-		      CollectFolderItem theItem
-		      
-		    Else
-		      
-		      // This is a file -> Gets its extension.
-		      
-		      Dim theExtension As String = theItem.FileExtension
-		      
-		      If InStr( kAllowedExtensions, theExtension ) > 0 then
-		        
-		        CollectedItems.Append theItem
-		        ListFiles.AddRow Format( ListFiles.ListCount + 1, "000" )
-		        Dim theLastIndex As Integer = ListFiles.LastIndex
-		        ListFiles.Cell( theLastIndex, 1 ) = theItem.Name
-		        ListFiles.Cell( theLastIndex, 2) = theExtension
-		        
-		        // Store the FolderItem reference for future use
-		        ListFiles.RowTag( theLastIndex ) = theItem
-		        
-		      End If
-		      
-		    End If
-		    
-		  Next
-		  
-		End Sub
-	#tag EndMethod
-
-
-	#tag Property, Flags = &h0
-		BaseFolder As FolderItem
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		CollectedItems() As FolderItem
-	#tag EndProperty
-
-
-	#tag Constant, Name = kAllowedExtensions, Type = String, Dynamic = False, Default = \"rbvcp\x2Crbbas\x2Crbfrm\x2Crbmnu", Scope = Public
-	#tag EndConstant
-
-
 #tag EndWindowCode
 
 #tag Events ButtonChoose
 	#tag Event
 		Sub Action()
 		  
-		  Dim theResult As FolderItem = SelectFolder
+		  Dim theProjectFolder As FolderItem = SelectFolder
 		  
-		  If theResult is Nil then
+		  If theProjectFolder Is Nil Then
 		    
 		    Return
 		    
 		  Else
 		    
-		    BaseFolder = theResult
-		    LabelFilePath.Text = BaseFolder.ShellPath
-		    Redim CollectedItems( -1 )
-		    CollectFolderItem theResult
-		    LabelInfos.Text = "Found " + Str( CollectedItems.Ubound + 1 ) + " file to process"
-		    ButtonProcess.Enabled = ( CollectedItems.Ubound > -1 )
+		    Self.ListFiles.DeleteAllRows
+		    Dim theFiles() As FolderItem = Functionality.CollectFolderItem( theProjectFolder )
+		    
+		    For Each file As FolderItem In theFiles
+		      
+		      Self.ListFiles.AddRow file.DisplayName
+		      Dim theLastIndex As Integer = Self.ListFiles.LastIndex
+		      Self.ListFiles.Cell( theLastIndex, 1 ) = file.FileExtension
+		      Self.ListFiles.RowTag( theLastIndex ) = file
+		      
+		    Next
+		    
+		    // Updating the window
+		    Self.ButtonProcess.Enabled = ( theFiles.Ubound > -1 )
+		    Self.LabelFilePath.Text = theProjectFolder.ShellPath
+		    Self.LabelInfos.Text = Str( theFiles.Ubound + 1 ) + " file(s) to process"
 		    
 		  End If
+		  
 		  
 		End Sub
 	#tag EndEvent
@@ -321,15 +276,25 @@ End
 		  
 		  Dim ErrorFlag As Boolean
 		  
-		  For Each File As FolderItem in Self.CollectedItems
+		  Dim theIndex, theCounter As Integer
+		  
+		  Do Until theIndex > ListFiles.ListCount - 1
 		    
-		    If Not SwitchtoWinEOL( File ) Then
+		    Dim theFile As FolderItem = Self.ListFiles.Rowtag( theIndex )
+		    
+		    If Not SwitchToUnixEOL( theFile ) Then
 		      
 		      ErrorFlag = True
+		      theIndex = theIndex + 1
+		      
+		    Else
+		      
+		      ListFiles.RemoveRow theIndex
+		      theCounter = theCounter + 1
 		      
 		    End If
 		    
-		  Next
+		  loop
 		  
 		  If ErrorFlag Then
 		    
@@ -337,6 +302,8 @@ End
 		    + "Check the console/error log for further details."
 		    
 		  End If
+		  
+		  Self.LabelInfos.text = Str( theCounter ) + " file(s) processed & " + Str( Self.ListFiles.ListCount ) + " error(s)."
 		  
 		End Sub
 	#tag EndEvent
