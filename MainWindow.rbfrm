@@ -233,6 +233,16 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Open()
+		  
+		  Call MsgBox( "Always backup your work !" + EndOfLine + EndOfLine _
+		  + "Before using this tool, you should consider backuping your files in case something goes wrong." + EndOfLine _
+		  + "You've been warned.", 48, "Warning" )
+		End Sub
+	#tag EndEvent
+
+
 #tag EndWindowCode
 
 #tag Events ButtonChoose
