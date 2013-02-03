@@ -118,7 +118,8 @@ Protected Module Functionality
 		  
 		  // Reset the destination file and rewrite it
 		  theStream.Length = 0
-		  theStream.Write( theResult )
+		  theStream.Position = 0
+		  theStream.Write(theResult)
 		  
 		  // Check for error while writing
 		  If theStream.LastErrorCode <> FolderItem.NoError Then

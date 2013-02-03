@@ -24,7 +24,7 @@ Begin Window MainWindow
    Title           =   "EOL Switcher"
    Visible         =   True
    Width           =   4.0e+2
-   Begin StaticText Label
+   Begin Label Label
       AutoDeactivate  =   True
       Bold            =   True
       DataField       =   ""
@@ -45,6 +45,7 @@ Begin Window MainWindow
       Scope           =   0
       TabIndex        =   0
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Folder To Process:"
       TextAlign       =   0
       TextColor       =   &h000000
@@ -56,7 +57,7 @@ Begin Window MainWindow
       Visible         =   True
       Width           =   197
    End
-   Begin StaticText LabelFilePath
+   Begin Label LabelFilePath
       AutoDeactivate  =   True
       Bold            =   ""
       DataField       =   ""
@@ -77,6 +78,7 @@ Begin Window MainWindow
       Scope           =   0
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Click on Choose to select a folder to process"
       TextAlign       =   0
       TextColor       =   &h000000
@@ -155,7 +157,7 @@ Begin Window MainWindow
       Border          =   True
       ColumnCount     =   2
       ColumnsResizable=   ""
-      ColumnWidths    =   ,60
+      ColumnWidths    =   ",60"
       DataField       =   ""
       DataSource      =   ""
       DefaultRowHeight=   -1
@@ -197,7 +199,7 @@ Begin Window MainWindow
       Width           =   360
       _ScrollWidth    =   -1
    End
-   Begin StaticText LabelInfos
+   Begin Label LabelInfos
       AutoDeactivate  =   True
       Bold            =   False
       DataField       =   ""
@@ -218,6 +220,7 @@ Begin Window MainWindow
       Scope           =   0
       TabIndex        =   4
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "0 files to process"
       TextAlign       =   0
       TextColor       =   &h000000

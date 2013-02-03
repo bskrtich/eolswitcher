@@ -1,5 +1,6 @@
 Type=Desktop
-RBProjectVersion=2009.04
+RBProjectVersion=2012.021
+MinIDEVersion=20070100
 Class=App;App.rbbas;&h4D2A03CB;&h0;false
 Window=MainWindow;MainWindow.rbfrm;&h15F6DA7;&h0;false
 MenuBar=MenuBar1;MenuBar1.rbmnu;&h2018314B;&h0;false
@@ -35,3 +36,5 @@ AppIcon=EOLSwitcher.rbres;&h0
 OSXBundleID=com.zaatardigital.eolswitcher
 DebuggerCommandLine=
 UseGDIPlus=False
+UseBuildsFolder=True
+IsWebProject=False

@@ -2,3 +2,6 @@
 *.obsolete
 Builds*
 *.debug
+
+*.DS_Store
+*.debug.app
